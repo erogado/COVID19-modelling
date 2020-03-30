@@ -1,4 +1,5 @@
 # COVID19-modelling
+A continuación, se desccrbe el contenido de la capeta *manipulación datasets*:
 * Existen 3 datasets que contienen:  
     **1** - datos sobre casos, altas, fallecidos, hospitalizados y en UCI,  
     **2** - datos por franja de edad y sexo de los casos confirmados, hospitalizados, ingresados en UCI y fallecidos  
