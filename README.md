@@ -10,6 +10,11 @@ A continuación, se desccrbe el contenido de la capeta *manipulación datasets*:
     **2** - Estos scripts, a su vez, dependen de *my_functions.R*, donde se contienen funciones necesarias para llevar a cabo las anteriores modificaciones.   
     **3** - Finalmente, ejecutando el script *navigation_list* se obtiene una lista de datasets con las variables de interés (fecha, casos, altas, fallecido, hospitalizados y en UCI). Por lo tanto, el script proncipal sería este último, siendo los anteriores necesarios para su creación.  
     
-* Los datasets (2) y (3) no presentan dependencias, dado que son extraidos del repositorio y presentados tal cual vienen. Viene cargados en los scripts *rango_edad_study.R* y *camas_uci.R* respectivamente.
+* Los datasets (2) y (3) no presentan dependencias, dado que son extraidos del repositorio y presentados tal cual vienen. Viene cargados en los scripts *rango_edad_study.R* y *camas_uci.R* respectivamente.  
+  
+  
+A continuación, se describe el contenido de la carpeta *modelos STAN*:
+Existen tres scripts: *SIR_poisson.stan*, *SEIR_poisson.stan* y *SEIR_mod_poisson.stan*.  
+El primero, es un modelo SIR simple aumiendo un likelihood Poisson. El segundo, contiene un modelo SEIR tradicional asumiendo un likelihood Poisson. Por último, el tercero contiene el SEIR modificado asumiendo el mismo likelihood.
 
  
