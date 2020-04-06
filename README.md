@@ -19,4 +19,4 @@ Existen tres scripts .stan en los que están programados los modelos: *SIR_poiss
 * El segundo, contiene un modelo SEIR tradicional asumiendo un likelihood Poisson. 
 * Por último, el tercero contiene el SEIR modificado asumiendo el mismo likelihood.  
   
-Finalmente, el script *prueba_modelos.R* es un script de R en el que pueden ejecutarse los diferentes modelos y analizar su output.
+Finalmente, el script *prueba_modelos.R* es un script de R en el que pueden ejecutarse los diferentes modelos y analizar su output. Nótese la dependencia de este script de los contenidos en la carpeta de *manipulación de datos* para cargar los datasets.
