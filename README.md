@@ -14,9 +14,9 @@ A continuación, se desccrbe el contenido de la capeta *manipulación datasets*:
   
   
 A continuación, se describe el contenido de la carpeta *modelos STAN*:
-Existen tres scripts: *SIR_poisson.stan*, *SEIR_poisson.stan* y *SEIR_mod_poisson.stan*.  
+Existen tres scripts .stan en los que están programados los modelos: *SIR_poisson.stan*, *SEIR_poisson.stan* y *SEIR_mod_poisson.stan*.  
 * El primero, es un modelo SIR simple aumiendo un likelihood Poisson. 
 * El segundo, contiene un modelo SEIR tradicional asumiendo un likelihood Poisson. 
-* Por último, el tercero contiene el SEIR modificado asumiendo el mismo likelihood.
-
- 
+* Por último, el tercero contiene el SEIR modificado asumiendo el mismo likelihood.  
+  
+Finalmente, el script *prueba_modelos.R* es un script de R en el que pueden ejecutarse los diferentes modelos y analizar su output.
