@@ -1,0 +1,109 @@
+functions {
+   real[] diff_eq(
+    real t, 
+    real[] y, 
+    real[] theta,
+    real[] x_r,
+    int[] x_i
+  ) {
+    
+    real dydt[6];
+    
+    real beta1 = theta[1];
+    real beta2 = theta[2];
+    real epsilon = theta[3];
+    real kappa = theta[4];
+    real lambda = theta[5];
+    real gamma1 = theta[6];
+    real gamma2 = theta[7];
+    real mu = theta[8];
+    real omega = theta[9];
+    real eta = theta[10];
+    
+    real S = y[1];
+    real E = y[2];
+    real I1 = y[3];
+    real I2 = y[4];
+    real R = y[5];
+    real D = y[6];
+    
+    dydt[1] = -beta1*exp(-eta*E*t)*S*E -beta2*exp(-eta*I1*t)*S*I1 -beta2*exp(-eta*I2*t)*S*I2;
+    dydt[2] = (beta1*exp(-eta*E*t)*S*E + beta2*exp(-eta*I1*t)*S*I1 + beta2*exp(-eta*I2*t)*S*I2) - epsilon*E;
+    dydt[3] = epsilon*E - lambda*kappa*I1 - gamma1*I1;
+    dydt[4] = lambda*kappa*I1 - gamma2*I2 - omega*mu*I2;
+    dydt[5] = gamma1*I1 + gamma2*I2;
+    dydt[6] = omega*mu*I2;
+    
+    return dydt;
+    
+  }
+}
+
+data {
+  int <lower = 1> T;
+  int <lower = 1> N;
+  int t0;
+  real ts[T];
+  int y[T];
+  int <lower = 1> n_fake;
+  real fake_ts[n_fake];
+}
+
+transformed data {
+  real x_r[0];
+  int x_i[0];
+}
+
+parameters {
+  real <lower = 0> theta[10];
+  real <lower = 0, upper = 1> S0;
+}
+
+transformed parameters {
+  real y_init[6];
+  real y_hat[T, 6];
+  
+  y_init[1] = S0;
+  y_init[2] = 1 - S0;
+  y_init[3] = 0;
+  y_init[4] = 0;
+  y_init[5] = 0;
+  y_init[6] = 0;
+  
+  y_hat = integrate_ode_rk45(diff_eq, y_init, t0, ts, theta, x_r, x_i);
+}
+
+model {
+  real rho[T];
+  real rho1[T];
+  real rho2[T];
+  
+  theta[1] ~ lognormal(0, 1); // beta1 +
+  theta[2] ~ lognormal(0, 1); // beta2 +
+  theta[3] ~ gamma(18, 100); // epsilon2 +
+  theta[4] ~ gamma(70, 500); // kappa+
+  theta[5] ~ beta(35, 140); // lambda+
+  theta[6] ~ gamma(35, 500); // gamma1+
+  theta[7] ~ gamma(30, 1000); // gamma2+
+  theta[8] ~ gamma(8.7, 300); // mu+
+  theta[9] ~ beta(20, 100); // omega +
+  theta[10] ~ uniform(0, 100); // omega +
+  S0 ~ beta(0.5, 0.5);
+  
+  for(t in 1:T) {
+    rho1[t] = y_hat[t, 3]*N;
+    rho2[t] = y_hat[t, 4]*N;
+    rho[t] = rho1[t] + rho2[t];
+  }
+  
+  y ~ poisson(rho);
+}
+
+generated quantities {
+  real R_0;
+  real fake_I[n_fake, 6];
+
+  R_0 = (theta[1] + theta[2]) / (theta[3] + theta[6] + theta[7] + theta[8]);
+  fake_I = integrate_ode_rk45(diff_eq, y_init, t0, fake_ts, theta, x_r, x_i);
+  
+}
